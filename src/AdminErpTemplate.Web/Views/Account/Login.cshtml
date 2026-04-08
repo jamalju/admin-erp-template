@@ -1,0 +1,46 @@
+@{
+    ViewData["Title"] = "Login";
+    Layout = "_AuthLayout";
+}
+
+<div class="auth-page">
+    <div class="auth-card">
+        <div class="auth-logo">
+            <i class="bi bi-grid-1x2-fill"></i>
+            <h4>AdminERP</h4>
+            <p class="text-muted">Sign in to your account</p>
+        </div>
+        <form>
+            <div class="mb-3">
+                <label class="form-label">Email or Username</label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+                    <input type="text" class="form-control" placeholder="admin" value="admin" />
+                </div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label d-flex justify-content-between">
+                    Password
+                    <a href="#" class="small">Forgot password?</a>
+                </label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                    <input type="password" class="form-control" placeholder="••••••••" value="admin123" />
+                </div>
+            </div>
+            <div class="mb-3 form-check">
+                <input type="checkbox" class="form-check-input" id="remember" checked />
+                <label class="form-check-label" for="remember">Remember me</label>
+            </div>
+            <a href="/Dashboard" class="btn btn-primary">Sign In</a>
+            <div class="auth-divider">or continue with</div>
+            <div class="d-flex gap-2">
+                <button type="button" class="btn btn-outline-secondary flex-fill"><i class="bi bi-google me-2"></i>Google</button>
+                <button type="button" class="btn btn-outline-secondary flex-fill"><i class="bi bi-microsoft me-2"></i>Microsoft</button>
+            </div>
+        </form>
+        <p class="text-center mt-3 mb-0 small text-muted">
+            Don't have an account? <a href="/Account/Register">Sign up</a>
+        </p>
+    </div>
+</div>

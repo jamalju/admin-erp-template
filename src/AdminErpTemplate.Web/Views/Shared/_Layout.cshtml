@@ -1,0 +1,377 @@
+@inject AdminErpTemplate.Core.Interfaces.IMenuService MenuService
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light" data-color-scheme="default">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - AdminERP</title>
+    <!-- Bootstrap 5.3 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <!-- App CSS -->
+    <link rel="stylesheet" href="~/css/theme.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/layout.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/components.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/responsive.css" asp-append-version="true" />
+</head>
+<body class="erp-body" id="erp-body">
+    @{
+        var sidebarMenu = MenuService.GetSidebarMenu();
+        var horizontalMenu = MenuService.GetHorizontalMenu();
+        var footerConfig = MenuService.GetFooterConfig();
+    }
+
+    <!-- Mobile Overlay -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- Sidebar -->
+    <aside class="erp-sidebar" id="erpSidebar">
+        <div class="sidebar-header">
+            <a href="/" class="sidebar-brand">
+                <i class="bi bi-grid-1x2-fill brand-icon"></i>
+                <span class="brand-text">AdminERP</span>
+            </a>
+            <button class="sidebar-close d-lg-none" id="sidebarClose">
+                <i class="bi bi-x-lg"></i>
+            </button>
+        </div>
+        <div class="sidebar-body" id="sidebarBody">
+            <nav class="sidebar-nav">
+                @{
+                    string currentSection = "";
+                }
+                @foreach (var item in sidebarMenu)
+                {
+                    if (!string.IsNullOrEmpty(item.Section) && item.Section != currentSection)
+                    {
+                        currentSection = item.Section;
+                        <div class="sidebar-section-title">@currentSection</div>
+                    }
+
+                    if (item.Children.Any())
+                    {
+                        <div class="sidebar-menu-item has-submenu">
+                            <a href="javascript:void(0)" class="sidebar-link" data-bs-toggle="collapse"
+                               data-bs-target="#menu-@item.Id" aria-expanded="false">
+                                <i class="bi @item.Icon sidebar-icon"></i>
+                                <span class="sidebar-text">@item.Title</span>
+                                @if (!string.IsNullOrEmpty(item.Badge))
+                                {
+                                    <span class="badge bg-@(item.BadgeColor ?? "primary") ms-auto me-2">@item.Badge</span>
+                                }
+                                <i class="bi bi-chevron-down submenu-arrow"></i>
+                            </a>
+                            <div class="collapse submenu-collapse" id="menu-@item.Id">
+                                <ul class="sidebar-submenu">
+                                    @foreach (var child in item.Children)
+                                    {
+                                        if (child.Children.Any())
+                                        {
+                                            <li class="has-submenu">
+                                                <a href="javascript:void(0)" class="sidebar-sublink" data-bs-toggle="collapse"
+                                                   data-bs-target="#submenu-@child.Id" aria-expanded="false">
+                                                    <span>@child.Title</span>
+                                                    <i class="bi bi-chevron-down submenu-arrow"></i>
+                                                </a>
+                                                <div class="collapse submenu-collapse" id="submenu-@child.Id">
+                                                    <ul class="sidebar-submenu nested">
+                                                        @foreach (var grandChild in child.Children)
+                                                        {
+                                                            <li>
+                                                                <a href="@grandChild.Url" class="sidebar-sublink">@grandChild.Title</a>
+                                                            </li>
+                                                        }
+                                                    </ul>
+                                                </div>
+                                            </li>
+                                        }
+                                        else
+                                        {
+                                            <li>
+                                                <a href="@child.Url" class="sidebar-sublink">
+                                                    @child.Title
+                                                    @if (!string.IsNullOrEmpty(child.Badge))
+                                                    {
+                                                        <span class="badge bg-@(child.BadgeColor ?? "primary") ms-auto">@child.Badge</span>
+                                                    }
+                                                </a>
+                                            </li>
+                                        }
+                                    }
+                                </ul>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="sidebar-menu-item">
+                            <a href="@item.Url" class="sidebar-link @(item.IsActive ? "active" : "")">
+                                <i class="bi @item.Icon sidebar-icon"></i>
+                                <span class="sidebar-text">@item.Title</span>
+                            </a>
+                        </div>
+                    }
+                }
+            </nav>
+        </div>
+        <div class="sidebar-footer">
+            <div class="sidebar-user">
+                <img src="https://ui-avatars.com/api/?name=Admin+User&background=6366f1&color=fff" alt="User" class="sidebar-avatar" />
+                <div class="sidebar-user-info">
+                    <span class="sidebar-user-name">Admin User</span>
+                    <span class="sidebar-user-role">Administrator</span>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content Wrapper -->
+    <div class="erp-main" id="erpMain">
+        <!-- Top Header -->
+        <header class="erp-header" id="erpHeader">
+            <div class="header-left">
+                <button class="header-btn sidebar-toggle" id="sidebarToggle" title="Toggle Sidebar">
+                    <i class="bi bi-list"></i>
+                </button>
+                <button class="header-btn menu-layout-toggle" id="menuLayoutToggle" title="Switch Menu Layout">
+                    <i class="bi bi-layout-text-sidebar-reverse" id="menuLayoutIcon"></i>
+                </button>
+                <!-- Search -->
+                <div class="header-search d-none d-md-flex">
+                    <i class="bi bi-search search-icon"></i>
+                    <input type="text" class="form-control search-input" placeholder="Search anything..." />
+                    <kbd class="search-kbd">Ctrl+K</kbd>
+                </div>
+            </div>
+            <div class="header-right">
+                <!-- Theme Toggle -->
+                <button class="header-btn theme-toggle" id="themeToggle" title="Toggle Dark/Light Mode">
+                    <i class="bi bi-moon-stars" id="themeIcon"></i>
+                </button>
+                <!-- Color Scheme -->
+                <div class="dropdown">
+                    <button class="header-btn" data-bs-toggle="dropdown" title="Color Scheme">
+                        <i class="bi bi-palette"></i>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-end color-scheme-dropdown p-3">
+                        <h6 class="dropdown-header px-0">Color Scheme</h6>
+                        <div class="color-scheme-grid">
+                            <button class="color-swatch active" data-scheme="default" style="background: #6366f1;" title="Default"></button>
+                            <button class="color-swatch" data-scheme="blue" style="background: #3b82f6;" title="Ocean Blue"></button>
+                            <button class="color-swatch" data-scheme="green" style="background: #22c55e;" title="Forest Green"></button>
+                            <button class="color-swatch" data-scheme="purple" style="background: #a855f7;" title="Royal Purple"></button>
+                            <button class="color-swatch" data-scheme="red" style="background: #ef4444;" title="Ruby Red"></button>
+                            <button class="color-swatch" data-scheme="orange" style="background: #f97316;" title="Sunset Orange"></button>
+                            <button class="color-swatch" data-scheme="teal" style="background: #14b8a6;" title="Teal"></button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Notifications -->
+                <div class="dropdown">
+                    <button class="header-btn position-relative" data-bs-toggle="dropdown" title="Notifications">
+                        <i class="bi bi-bell"></i>
+                        <span class="notification-badge">3</span>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-end notification-dropdown">
+                        <div class="notification-header">
+                            <h6>Notifications</h6>
+                            <a href="#">Mark all read</a>
+                        </div>
+                        <div class="notification-body">
+                            <a href="#" class="notification-item unread">
+                                <div class="notification-icon bg-primary-subtle text-primary"><i class="bi bi-cart-plus"></i></div>
+                                <div class="notification-content">
+                                    <p class="notification-text">New order #1247 received</p>
+                                    <span class="notification-time">2 min ago</span>
+                                </div>
+                            </a>
+                            <a href="#" class="notification-item unread">
+                                <div class="notification-icon bg-success-subtle text-success"><i class="bi bi-check-circle"></i></div>
+                                <div class="notification-content">
+                                    <p class="notification-text">Payment confirmed - $1,250</p>
+                                    <span class="notification-time">15 min ago</span>
+                                </div>
+                            </a>
+                            <a href="#" class="notification-item">
+                                <div class="notification-icon bg-warning-subtle text-warning"><i class="bi bi-exclamation-triangle"></i></div>
+                                <div class="notification-content">
+                                    <p class="notification-text">Invoice #892 is overdue</p>
+                                    <span class="notification-time">1 hour ago</span>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="notification-footer">
+                            <a href="#">View all notifications</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Fullscreen -->
+                <button class="header-btn d-none d-md-flex" id="fullscreenToggle" title="Fullscreen">
+                    <i class="bi bi-arrows-fullscreen"></i>
+                </button>
+                <!-- User Menu -->
+                <div class="dropdown">
+                    <button class="header-user-btn" data-bs-toggle="dropdown">
+                        <img src="https://ui-avatars.com/api/?name=Admin+User&background=6366f1&color=fff" alt="User" class="header-avatar" />
+                        <span class="header-user-name d-none d-md-inline">Admin</span>
+                        <i class="bi bi-chevron-down"></i>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-end user-dropdown">
+                        <div class="user-dropdown-header">
+                            <img src="https://ui-avatars.com/api/?name=Admin+User&background=6366f1&color=fff" alt="User" />
+                            <div>
+                                <h6>Admin User</h6>
+                                <small>admin&#64;adminerp.com</small>
+                            </div>
+                        </div>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="/Dashboard/Profile"><i class="bi bi-person me-2"></i>Profile</a>
+                        <a class="dropdown-item" href="/Dashboard/Settings"><i class="bi bi-gear me-2"></i>Settings</a>
+                        <a class="dropdown-item" href="#"><i class="bi bi-question-circle me-2"></i>Help</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item text-danger" href="/Account/Login"><i class="bi bi-box-arrow-right me-2"></i>Logout</a>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Horizontal Mega Menu -->
+        <nav class="erp-horizontal-menu" id="erpHorizontalMenu" style="display:none;">
+            <div class="horizontal-menu-inner">
+                @foreach (var item in horizontalMenu)
+                {
+                    if (item.Children.Any())
+                    {
+                        <div class="hmenu-item mega-dropdown">
+                            <a href="javascript:void(0)" class="hmenu-link" data-bs-toggle="dropdown">
+                                <i class="bi @item.Icon"></i>
+                                <span>@item.Title</span>
+                                <i class="bi bi-chevron-down ms-1 small"></i>
+                            </a>
+                            <div class="dropdown-menu mega-menu">
+                                <div class="mega-menu-inner">
+                                    @foreach (var child in item.Children)
+                                    {
+                                        <div class="mega-menu-column">
+                                            <h6 class="mega-menu-title">
+                                                @if (!string.IsNullOrEmpty(child.Icon))
+                                                {
+                                                    <i class="bi @child.Icon me-1"></i>
+                                                }
+                                                @child.Title
+                                            </h6>
+                                            @if (child.Children.Any())
+                                            {
+                                                <ul class="mega-menu-links">
+                                                    @foreach (var link in child.Children)
+                                                    {
+                                                        <li><a href="@link.Url">@link.Title</a></li>
+                                                    }
+                                                </ul>
+                                            }
+                                            else
+                                            {
+                                                <ul class="mega-menu-links">
+                                                    <li><a href="@child.Url">@child.Title</a></li>
+                                                </ul>
+                                            }
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="hmenu-item">
+                            <a href="@item.Url" class="hmenu-link">
+                                <i class="bi @item.Icon"></i>
+                                <span>@item.Title</span>
+                            </a>
+                        </div>
+                    }
+                }
+            </div>
+        </nav>
+
+        <!-- Breadcrumb -->
+        <div class="erp-breadcrumb" id="erpBreadcrumb">
+            <div class="breadcrumb-inner">
+                <h5 class="page-title">@(ViewData["Title"] ?? "Dashboard")</h5>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb mb-0">
+                        <li class="breadcrumb-item"><a href="/Dashboard"><i class="bi bi-house"></i> Home</a></li>
+                        @if (ViewData["BreadcrumbParent"] != null)
+                        {
+                            <li class="breadcrumb-item"><a href="@ViewData["BreadcrumbParentUrl"]">@ViewData["BreadcrumbParent"]</a></li>
+                        }
+                        <li class="breadcrumb-item active" aria-current="page">@(ViewData["Title"] ?? "Dashboard")</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+
+        <!-- Page Content -->
+        <main class="erp-content">
+            @RenderBody()
+        </main>
+
+        <!-- Mega Footer -->
+        <footer class="erp-footer">
+            <div class="footer-top">
+                <div class="row g-4">
+                    <div class="col-lg-4 col-md-6">
+                        <div class="footer-brand">
+                            <h4><i class="bi bi-grid-1x2-fill me-2"></i>@footerConfig.CompanyName</h4>
+                            <p>@footerConfig.Description</p>
+                            <div class="footer-social">
+                                @foreach (var social in footerConfig.SocialLinks)
+                                {
+                                    <a href="@social.Url" class="social-link" title="@social.Platform">
+                                        <i class="bi @social.Icon"></i>
+                                    </a>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    @foreach (var column in footerConfig.Columns)
+                    {
+                        <div class="col-lg-2 col-md-3 col-6">
+                            <h6 class="footer-column-title">@column.Title</h6>
+                            <ul class="footer-links">
+                                @foreach (var link in column.Links)
+                                {
+                                    <li><a href="@link.Url">@link.Title</a></li>
+                                }
+                            </ul>
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <div class="row align-items-center">
+                    <div class="col-md-6">
+                        <p class="mb-0">@footerConfig.Copyright</p>
+                    </div>
+                    <div class="col-md-6 text-md-end">
+                        <p class="mb-0">Built with <i class="bi bi-heart-fill text-danger"></i> using ASP.NET Core 8.0</p>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <!-- App JS -->
+    <script src="~/js/theme.js" asp-append-version="true"></script>
+    <script src="~/js/sidebar.js" asp-append-version="true"></script>
+    <script src="~/js/app.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,254 @@
+@model AdminErpTemplate.Core.Models.DashboardData
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<!-- Welcome Card -->
+<div class="welcome-card mb-4">
+    <h4>Welcome back, Admin! 👋</h4>
+    <p>Here's what's happening with your business today. You have <strong>12 new orders</strong> and <strong>3 pending invoices</strong> to review.</p>
+    <a href="/Dashboard/Orders" class="btn">View Orders <i class="bi bi-arrow-right ms-1"></i></a>
+</div>
+
+<!-- KPI Cards -->
+<div class="row g-3 mb-4">
+    @foreach (var kpi in Model.KpiCards)
+    {
+        <div class="col-xl-3 col-sm-6">
+            <div class="kpi-card" style="--kpi-color: var(--bs-@kpi.Color);">
+                <div class="kpi-info">
+                    <h6>@kpi.Title</h6>
+                    <div class="kpi-value">@kpi.Value</div>
+                    @if (!string.IsNullOrEmpty(kpi.Change))
+                    {
+                        <span class="kpi-change @(kpi.IsPositiveChange ? "positive" : "negative")">
+                            <i class="bi @(kpi.IsPositiveChange ? "bi-arrow-up" : "bi-arrow-down")"></i>
+                            @kpi.Change
+                        </span>
+                    }
+                </div>
+                <div class="kpi-icon @kpi.Color">
+                    <i class="bi @kpi.Icon"></i>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<!-- Charts Row -->
+<div class="row g-3 mb-4">
+    <div class="col-xl-8">
+        <div class="dash-card">
+            <div class="dash-card-header">
+                <h6><i class="bi bi-graph-up me-2"></i>Revenue Overview</h6>
+                <div class="dropdown">
+                    <button class="btn btn-sm btn-outline-secondary" data-bs-toggle="dropdown">
+                        This Year <i class="bi bi-chevron-down ms-1"></i>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="#">This Year</a></li>
+                        <li><a class="dropdown-item" href="#">Last Year</a></li>
+                        <li><a class="dropdown-item" href="#">Last 6 Months</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="dash-card-body">
+                <div class="chart-container">
+                    <canvas id="revenueChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-4">
+        <div class="dash-card">
+            <div class="dash-card-header">
+                <h6><i class="bi bi-pie-chart me-2"></i>Orders by Category</h6>
+            </div>
+            <div class="dash-card-body">
+                <div class="chart-container" style="height: 260px;">
+                    <canvas id="ordersChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Activity & Products Row -->
+<div class="row g-3 mb-4">
+    <div class="col-xl-5">
+        <div class="dash-card">
+            <div class="dash-card-header">
+                <h6><i class="bi bi-activity me-2"></i>Recent Activity</h6>
+                <a href="#" class="btn btn-sm btn-outline-primary">View All</a>
+            </div>
+            <div class="dash-card-body p-0">
+                <ul class="activity-timeline" style="padding: 0 24px;">
+                    @foreach (var activity in Model.RecentActivities)
+                    {
+                        <li class="activity-item">
+                            <div class="activity-icon @activity.Color">
+                                <i class="bi @activity.Icon"></i>
+                            </div>
+                            <div class="activity-content">
+                                <div class="activity-title">@activity.Title</div>
+                                <p class="activity-desc">@activity.Description</p>
+                            </div>
+                            <span class="activity-time">@activity.Time</span>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-7">
+        <div class="dash-card">
+            <div class="dash-card-header">
+                <h6><i class="bi bi-trophy me-2"></i>Top Products</h6>
+                <a href="/Dashboard/Products" class="btn btn-sm btn-outline-primary">View All</a>
+            </div>
+            <div class="dash-card-body p-0">
+                <div class="table-responsive">
+                    <table class="erp-table">
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th>Price</th>
+                                <th>Sold</th>
+                                <th>Revenue</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var product in Model.TopProducts)
+                            {
+                                var statusClass = product.Status switch
+                                {
+                                    "In Stock" => "in-stock",
+                                    "Low Stock" => "low-stock",
+                                    "Out of Stock" => "out-of-stock",
+                                    _ => ""
+                                };
+                                <tr>
+                                    <td>
+                                        <div>
+                                            <strong>@product.Name</strong>
+                                            <div class="text-muted small">@product.Category</div>
+                                        </div>
+                                    </td>
+                                    <td>$@product.Price.ToString("N2")</td>
+                                    <td>@product.Sold.ToString("N0")</td>
+                                    <td><strong>$@product.Revenue.ToString("N2")</strong></td>
+                                    <td><span class="status-badge @statusClass">@product.Status</span></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+    // Revenue Chart
+    (function() {
+        var ctx = document.getElementById('revenueChart');
+        if (!ctx) return;
+
+        var style = getComputedStyle(document.documentElement);
+        var primaryColor = style.getPropertyValue('--erp-primary').trim() || '#6366f1';
+        var textMuted = style.getPropertyValue('--erp-text-muted').trim() || '#94a3b8';
+        var borderColor = style.getPropertyValue('--erp-border').trim() || '#e2e8f0';
+
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                datasets: [
+                    {
+                        label: 'Revenue',
+                        data: [4200, 3800, 5100, 4600, 5800, 6200, 5400, 6800, 7100, 6500, 7800, 8200],
+                        borderColor: primaryColor,
+                        backgroundColor: primaryColor + '15',
+                        fill: true,
+                        tension: 0.4,
+                        borderWidth: 2,
+                        pointRadius: 3,
+                        pointHoverRadius: 6
+                    },
+                    {
+                        label: 'Expenses',
+                        data: [2800, 2600, 3200, 3000, 3400, 3800, 3200, 4000, 4200, 3800, 4400, 4600],
+                        borderColor: '#f43f5e',
+                        backgroundColor: 'rgba(244, 63, 94, 0.08)',
+                        fill: true,
+                        tension: 0.4,
+                        borderWidth: 2,
+                        pointRadius: 3,
+                        pointHoverRadius: 6
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: { color: textMuted, usePointStyle: true, padding: 20 }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { color: borderColor },
+                        ticks: { color: textMuted }
+                    },
+                    y: {
+                        grid: { color: borderColor },
+                        ticks: {
+                            color: textMuted,
+                            callback: function(v) { return '$' + v.toLocaleString(); }
+                        }
+                    }
+                },
+                interaction: { intersect: false, mode: 'index' }
+            }
+        });
+    })();
+
+    // Orders Doughnut Chart
+    (function() {
+        var ctx = document.getElementById('ordersChart');
+        if (!ctx) return;
+
+        new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Electronics', 'Clothing', 'Food', 'Books', 'Other'],
+                datasets: [{
+                    data: [35, 25, 20, 12, 8],
+                    backgroundColor: ['#6366f1', '#22c55e', '#f59e0b', '#06b6d4', '#f43f5e'],
+                    borderWidth: 0,
+                    hoverOffset: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '65%',
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            color: getComputedStyle(document.documentElement).getPropertyValue('--erp-text-muted').trim() || '#94a3b8',
+                            usePointStyle: true,
+                            padding: 16
+                        }
+                    }
+                }
+            }
+        });
+    })();
+</script>
+}

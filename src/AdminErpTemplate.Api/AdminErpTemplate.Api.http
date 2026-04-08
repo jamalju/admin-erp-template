@@ -1,0 +1,6 @@
+@AdminErpTemplate.Api_HostAddress = http://localhost:5047
+
+GET {{AdminErpTemplate.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
