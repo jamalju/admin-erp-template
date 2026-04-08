@@ -600,7 +600,15 @@
     align-items: center;
     gap: 4px;
     width: 100%;
-    overflow-x: auto;
+}
+
+.mega-dropdown.dropdown {
+    position: static;
+}
+
+.mega-dropdown .mega-menu {
+    left: 0;
+    right: auto;
 }
 
 .hmenu-item {
