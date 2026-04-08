@@ -62,10 +62,49 @@ public class DashboardController : Controller
         };
         return View(inventory);
     }
-    public IActionResult Employees() => View();
-    public IActionResult Departments() => View();
-    public IActionResult Attendance() => View();
-    public IActionResult Payroll() => View();
+    public IActionResult Employees()
+    {
+        var employees = new List<Models.Employee>
+        {
+            new Models.Employee { Id = 1, Name = "Alice Smith", Position = "Manager", Department = "Sales" },
+            new Models.Employee { Id = 2, Name = "Bob Johnson", Position = "Developer", Department = "IT" },
+            new Models.Employee { Id = 3, Name = "Charlie Brown", Position = "Accountant", Department = "Finance" }
+        };
+        return View(employees);
+    }
+
+    public IActionResult Departments()
+    {
+        var departments = new List<Models.Department>
+        {
+            new Models.Department { Id = 1, Name = "Sales", Manager = "Alice Smith" },
+            new Models.Department { Id = 2, Name = "IT", Manager = "Bob Johnson" },
+            new Models.Department { Id = 3, Name = "Finance", Manager = "Charlie Brown" }
+        };
+        return View(departments);
+    }
+
+    public IActionResult Attendance()
+    {
+        var attendance = new List<Models.AttendanceRecord>
+        {
+            new Models.AttendanceRecord { Id = 1, Employee = "Alice Smith", Date = DateTime.Today, Status = "Present" },
+            new Models.AttendanceRecord { Id = 2, Employee = "Bob Johnson", Date = DateTime.Today, Status = "Absent" },
+            new Models.AttendanceRecord { Id = 3, Employee = "Charlie Brown", Date = DateTime.Today, Status = "Present" }
+        };
+        return View(attendance);
+    }
+
+    public IActionResult Payroll()
+    {
+        var payroll = new List<Models.PayrollRecord>
+        {
+            new Models.PayrollRecord { Id = 1, Employee = "Alice Smith", Amount = 2500.00m, Date = DateTime.Today.AddDays(-5) },
+            new Models.PayrollRecord { Id = 2, Employee = "Bob Johnson", Amount = 1800.00m, Date = DateTime.Today.AddDays(-5) },
+            new Models.PayrollRecord { Id = 3, Employee = "Charlie Brown", Amount = 2000.00m, Date = DateTime.Today.AddDays(-5) }
+        };
+        return View(payroll);
+    }
     public IActionResult Invoices() => View();
     public IActionResult Expenses() => View();
     public IActionResult Reports() => View();
