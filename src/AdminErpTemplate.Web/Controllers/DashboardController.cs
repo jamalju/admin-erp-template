@@ -105,11 +105,60 @@ public class DashboardController : Controller
         };
         return View(payroll);
     }
-    public IActionResult Invoices() => View();
-    public IActionResult Expenses() => View();
-    public IActionResult Reports() => View();
-    public IActionResult TaxSettings() => View();
-    public IActionResult TaxReports() => View();
+    public IActionResult Invoices()
+    {
+        var invoices = new List<Models.Invoice>
+        {
+            new Models.Invoice { Id = 1, Customer = "Alice Smith", Amount = 500.00m, Date = DateTime.Today.AddDays(-10) },
+            new Models.Invoice { Id = 2, Customer = "Bob Johnson", Amount = 1200.00m, Date = DateTime.Today.AddDays(-7) },
+            new Models.Invoice { Id = 3, Customer = "Charlie Brown", Amount = 300.00m, Date = DateTime.Today.AddDays(-3) }
+        };
+        return View(invoices);
+    }
+
+    public IActionResult Expenses()
+    {
+        var expenses = new List<Models.Expense>
+        {
+            new Models.Expense { Id = 1, Description = "Office Supplies", Amount = 150.00m, Date = DateTime.Today.AddDays(-12) },
+            new Models.Expense { Id = 2, Description = "Travel", Amount = 800.00m, Date = DateTime.Today.AddDays(-8) },
+            new Models.Expense { Id = 3, Description = "Utilities", Amount = 200.00m, Date = DateTime.Today.AddDays(-2) }
+        };
+        return View(expenses);
+    }
+
+    public IActionResult Reports()
+    {
+        var reports = new List<Models.Report>
+        {
+            new Models.Report { Id = 1, Title = "Sales Report", Type = "Sales", Date = DateTime.Today.AddDays(-30) },
+            new Models.Report { Id = 2, Title = "Inventory Report", Type = "Inventory", Date = DateTime.Today.AddDays(-20) },
+            new Models.Report { Id = 3, Title = "Expense Report", Type = "Finance", Date = DateTime.Today.AddDays(-10) }
+        };
+        return View(reports);
+    }
+
+    public IActionResult TaxSettings()
+    {
+        var taxSettings = new List<Models.TaxSetting>
+        {
+            new Models.TaxSetting { Id = 1, Name = "VAT", Rate = 0.15m },
+            new Models.TaxSetting { Id = 2, Name = "GST", Rate = 0.10m },
+            new Models.TaxSetting { Id = 3, Name = "Service Tax", Rate = 0.05m }
+        };
+        return View(taxSettings);
+    }
+
+    public IActionResult TaxReports()
+    {
+        var taxReports = new List<Models.TaxReport>
+        {
+            new Models.TaxReport { Id = 1, Period = "Q1 2024", Amount = 1500.00m },
+            new Models.TaxReport { Id = 2, Period = "Q2 2024", Amount = 1800.00m },
+            new Models.TaxReport { Id = 3, Period = "Q3 2024", Amount = 2100.00m }
+        };
+        return View(taxReports);
+    }
     public IActionResult Leads() => View();
     public IActionResult Deals() => View();
     public IActionResult Contacts() => View();
