@@ -4,16 +4,36 @@
     ViewData["BreadcrumbParentUrl"] = "#";
 }
 
+
 <div class="dash-card">
     <div class="dash-card-body">
-        <div class="placeholder-page">
-            <div class="placeholder-icon"><i class="bi bi-handshake"></i></div>
-            <h3>Deals</h3>
-            <p>This is a placeholder for the Deals module. Connect this page to your backend API to display real data from your ERP system.</p>
-            <div class="mt-4">
-                <a href="/Dashboard" class="btn btn-primary me-2"><i class="bi bi-arrow-left me-1"></i>Back to Dashboard</a>
-                <button class="btn btn-outline-secondary"><i class="bi bi-plus-lg me-1"></i>Add New</button>
-            </div>
+        <h3><i class="bi bi-handshake"></i> Deals</h3>
+        <table class="erp-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Title</th>
+                    <th>Customer</th>
+                    <th>Value</th>
+                    <th>Stage</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var deal in (List<AdminErpTemplate.Web.Models.Deal>)Model)
+            {
+                <tr>
+                    <td>@deal.Id</td>
+                    <td>@deal.Title</td>
+                    <td>@deal.Customer</td>
+                    <td>@deal.Value.ToString("C")</td>
+                    <td>@deal.Stage</td>
+                </tr>
+            }
+            </tbody>
+        </table>
+        <div class="mt-4">
+            <a href="/Dashboard" class="btn btn-primary me-2"><i class="bi bi-arrow-left me-1"></i>Back to Dashboard</a>
+            <button class="btn btn-outline-secondary"><i class="bi bi-plus-lg me-1"></i>Add New</button>
         </div>
     </div>
 </div>

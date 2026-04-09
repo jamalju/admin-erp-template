@@ -159,12 +159,71 @@ public class DashboardController : Controller
         };
         return View(taxReports);
     }
-    public IActionResult Leads() => View();
-    public IActionResult Deals() => View();
-    public IActionResult Contacts() => View();
-    public IActionResult Projects() => View();
-    public IActionResult Tasks() => View();
-    public IActionResult Timeline() => View();
+    public IActionResult Leads()
+    {
+        var leads = new List<Models.Lead>
+        {
+            new Models.Lead { Id = 1, Name = "Acme Corp", Source = "Web", Status = "New" },
+            new Models.Lead { Id = 2, Name = "Beta LLC", Source = "Referral", Status = "Contacted" },
+            new Models.Lead { Id = 3, Name = "Gamma Inc", Source = "Email", Status = "Qualified" }
+        };
+        return View(leads);
+    }
+
+    public IActionResult Deals()
+    {
+        var deals = new List<Models.Deal>
+        {
+            new Models.Deal { Id = 1, Title = "ERP Implementation", Customer = "Acme Corp", Value = 10000m, Stage = "Negotiation" },
+            new Models.Deal { Id = 2, Title = "Support Contract", Customer = "Beta LLC", Value = 2500m, Stage = "Proposal" },
+            new Models.Deal { Id = 3, Title = "Upgrade Project", Customer = "Gamma Inc", Value = 5000m, Stage = "Closed Won" }
+        };
+        return View(deals);
+    }
+
+    public IActionResult Contacts()
+    {
+        var contacts = new List<Models.Contact>
+        {
+            new Models.Contact { Id = 1, Name = "Alice Smith", Email = "alice@example.com", Phone = "123-456-7890" },
+            new Models.Contact { Id = 2, Name = "Bob Johnson", Email = "bob@example.com", Phone = "234-567-8901" },
+            new Models.Contact { Id = 3, Name = "Charlie Brown", Email = "charlie@example.com", Phone = "345-678-9012" }
+        };
+        return View(contacts);
+    }
+
+    public IActionResult Projects()
+    {
+        var projects = new List<Models.Project>
+        {
+            new Models.Project { Id = 1, Name = "ERP Launch", Manager = "Alice Smith", Status = "Active" },
+            new Models.Project { Id = 2, Name = "Website Redesign", Manager = "Bob Johnson", Status = "Planning" },
+            new Models.Project { Id = 3, Name = "Mobile App", Manager = "Charlie Brown", Status = "Completed" }
+        };
+        return View(projects);
+    }
+
+    public IActionResult Tasks()
+    {
+        var tasks = new List<Models.TaskItem>
+        {
+            new Models.TaskItem { Id = 1, Title = "Setup Database", AssignedTo = "Alice Smith", Status = "Done" },
+            new Models.TaskItem { Id = 2, Title = "Design UI", AssignedTo = "Bob Johnson", Status = "In Progress" },
+            new Models.TaskItem { Id = 3, Title = "Write Documentation", AssignedTo = "Charlie Brown", Status = "To Do" }
+        };
+        return View(tasks);
+    }
+
+    public IActionResult Timeline()
+    {
+        var timeline = new List<Models.TimelineEvent>
+        {
+            new Models.TimelineEvent { Id = 1, Title = "Project Kickoff", Date = DateTime.Today.AddDays(-30), Description = "Initial meeting with stakeholders." },
+            new Models.TimelineEvent { Id = 2, Title = "Phase 1 Complete", Date = DateTime.Today.AddDays(-15), Description = "Development phase 1 finished." },
+            new Models.TimelineEvent { Id = 3, Title = "Go Live", Date = DateTime.Today, Description = "System launched to production." }
+        };
+        return View(timeline);
+    }
     public IActionResult Buttons() => View();
     public IActionResult Cards() => View();
     public IActionResult Modals() => View();
