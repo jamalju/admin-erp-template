@@ -1,0 +1,230 @@
+/* ============================================
+   AdminERP Responsive Design
+   Mobile-first responsive breakpoints
+   ============================================ */
+
+/* Tablet and smaller */
+@media (max-width: 991.98px) {
+    .erp-sidebar {
+        transform: translateX(-100%);
+    }
+
+    .erp-sidebar.show {
+        transform: translateX(0);
+    }
+
+    .erp-main {
+        margin-left: 0 !important;
+    }
+
+    .sidebar-collapsed .erp-sidebar {
+        width: var(--erp-sidebar-width);
+    }
+
+    .erp-header {
+        padding: 0 16px;
+    }
+
+    .erp-breadcrumb {
+        padding: 12px 16px;
+    }
+
+    .erp-content {
+        padding: 16px;
+    }
+
+    .footer-top {
+        padding: 32px 16px 24px;
+    }
+
+    .footer-bottom {
+        padding: 16px;
+        text-align: center;
+    }
+
+    .footer-bottom .text-md-end {
+        text-align: center !important;
+        margin-top: 8px;
+    }
+
+    .mega-menu {
+        width: calc(100vw - 32px);
+    }
+
+    .notification-dropdown {
+        width: calc(100vw - 32px);
+        max-width: 360px;
+    }
+
+    /* Horizontal menu scrollable on tablet */
+    .erp-horizontal-menu {
+        overflow-x: auto;
+        padding: 0 16px;
+    }
+}
+
+/* Mobile */
+@media (max-width: 767.98px) {
+    .erp-header {
+        padding: 0 12px;
+        gap: 8px;
+    }
+
+    .header-search {
+        display: none !important;
+    }
+
+    .search-input {
+        width: 200px;
+    }
+
+    .erp-content {
+        padding: 12px;
+    }
+
+    .kpi-card {
+        padding: 16px;
+    }
+
+    .kpi-value {
+        font-size: 1.375rem;
+    }
+
+    .kpi-icon {
+        width: 44px;
+        height: 44px;
+        font-size: 1.25rem;
+    }
+
+    .dash-card-header {
+        padding: 16px;
+    }
+
+    .dash-card-body {
+        padding: 16px;
+    }
+
+    .chart-container {
+        height: 220px;
+    }
+
+    .breadcrumb-inner {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .welcome-card {
+        padding: 24px;
+    }
+
+    .welcome-card h4 {
+        font-size: 1.125rem;
+    }
+
+    .erp-table {
+        font-size: 0.8125rem;
+    }
+
+    .erp-table thead th,
+    .erp-table tbody td {
+        padding: 10px 12px;
+    }
+
+    .footer-top {
+        padding: 24px 12px 16px;
+    }
+
+    .footer-brand h4 {
+        font-size: 1.125rem;
+    }
+
+    .footer-column-title {
+        margin-top: 16px;
+        margin-bottom: 8px;
+    }
+
+    .mega-menu {
+        width: calc(100vw - 16px);
+    }
+
+    .auth-card {
+        padding: 24px;
+    }
+
+    .placeholder-page {
+        padding: 40px 16px;
+    }
+
+    .placeholder-icon {
+        font-size: 3rem;
+    }
+}
+
+/* Small mobile */
+@media (max-width: 575.98px) {
+    .header-user-btn {
+        padding: 4px;
+        border: none;
+    }
+
+    .header-user-name {
+        display: none;
+    }
+
+    .erp-content {
+        padding: 8px;
+    }
+
+    .kpi-card {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .kpi-icon {
+        order: -1;
+    }
+}
+
+/* Large screens */
+@media (min-width: 1400px) {
+    .erp-content {
+        padding: 28px 32px;
+    }
+
+    .footer-top {
+        padding: 56px 32px 40px;
+    }
+
+    .erp-header {
+        padding: 0 32px;
+    }
+
+    .erp-breadcrumb {
+        padding: 16px 32px;
+    }
+}
+
+/* Print */
+@media print {
+    .erp-sidebar,
+    .erp-header,
+    .erp-horizontal-menu,
+    .erp-breadcrumb,
+    .erp-footer,
+    .sidebar-overlay {
+        display: none !important;
+    }
+
+    .erp-main {
+        margin-left: 0 !important;
+    }
+
+    .erp-content {
+        padding: 0;
+    }
+
+    .card {
+        box-shadow: none;
+        border: 1px solid #ddd;
+    }
+}

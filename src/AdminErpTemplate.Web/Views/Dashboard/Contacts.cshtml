@@ -1,0 +1,37 @@
+@{
+    ViewData["Title"] = "Contacts";
+    ViewData["BreadcrumbParent"] = "CRM";
+    ViewData["BreadcrumbParentUrl"] = "#";
+}
+
+
+<div class="dash-card">
+    <div class="dash-card-body">
+        <h3><i class="bi bi-person-rolodex"></i> Contacts</h3>
+        <table class="erp-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var contact in (List<AdminErpTemplate.Web.Models.Contact>)Model)
+            {
+                <tr>
+                    <td>@contact.Id</td>
+                    <td>@contact.Name</td>
+                    <td>@contact.Email</td>
+                    <td>@contact.Phone</td>
+                </tr>
+            }
+            </tbody>
+        </table>
+        <div class="mt-4">
+            <a href="/Dashboard" class="btn btn-primary me-2"><i class="bi bi-arrow-left me-1"></i>Back to Dashboard</a>
+            <button class="btn btn-outline-secondary"><i class="bi bi-plus-lg me-1"></i>Add New</button>
+        </div>
+    </div>
+</div>

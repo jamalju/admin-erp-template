@@ -1,0 +1,37 @@
+@{
+    ViewData["Title"] = "Timeline";
+    ViewData["BreadcrumbParent"] = "Project Management";
+    ViewData["BreadcrumbParentUrl"] = "#";
+}
+
+
+<div class="dash-card">
+    <div class="dash-card-body">
+        <h3><i class="bi bi-calendar3"></i> Timeline</h3>
+        <table class="erp-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Title</th>
+                    <th>Date</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var ev in (List<AdminErpTemplate.Web.Models.TimelineEvent>)Model)
+            {
+                <tr>
+                    <td>@ev.Id</td>
+                    <td>@ev.Title</td>
+                    <td>@ev.Date.ToShortDateString()</td>
+                    <td>@ev.Description</td>
+                </tr>
+            }
+            </tbody>
+        </table>
+        <div class="mt-4">
+            <a href="/Dashboard" class="btn btn-primary me-2"><i class="bi bi-arrow-left me-1"></i>Back to Dashboard</a>
+            <button class="btn btn-outline-secondary"><i class="bi bi-plus-lg me-1"></i>Add New</button>
+        </div>
+    </div>
+</div>

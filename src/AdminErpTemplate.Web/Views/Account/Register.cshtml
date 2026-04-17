@@ -1,0 +1,52 @@
+@{
+    ViewData["Title"] = "Register";
+    Layout = "_AuthLayout";
+}
+
+<div class="auth-page">
+    <div class="auth-card">
+        <div class="auth-logo">
+            <i class="bi bi-grid-1x2-fill"></i>
+            <h4>AdminERP</h4>
+            <p class="text-muted">Create your account</p>
+        </div>
+        <form>
+            <div class="mb-3">
+                <label class="form-label">Full Name</label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="bi bi-person"></i></span>
+                    <input type="text" class="form-control" placeholder="John Doe" />
+                </div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Email</label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+                    <input type="email" class="form-control" placeholder="john@example.com" />
+                </div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Password</label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                    <input type="password" class="form-control" placeholder="••••••••" />
+                </div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Confirm Password</label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="bi bi-lock-fill"></i></span>
+                    <input type="password" class="form-control" placeholder="••••••••" />
+                </div>
+            </div>
+            <div class="mb-3 form-check">
+                <input type="checkbox" class="form-check-input" id="terms" />
+                <label class="form-check-label" for="terms">I agree to the <a href="#">Terms of Service</a></label>
+            </div>
+            <button type="button" class="btn btn-primary" onclick="window.location='/Dashboard'">Create Account</button>
+        </form>
+        <p class="text-center mt-3 mb-0 small text-muted">
+            Already have an account? <a href="/Account/Login">Sign in</a>
+        </p>
+    </div>
+</div>
