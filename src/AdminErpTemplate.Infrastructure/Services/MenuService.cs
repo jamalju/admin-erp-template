@@ -27,10 +27,10 @@ public class MenuService : IMenuService
                 Order = 2,
                 Children = new List<MenuItem>
                 {
-                    new MenuItem { Id = "products", Title = "Products", Icon = "bi-box", Url = "/Dashboard/Products" },
-                    new MenuItem { Id = "orders", Title = "Orders", Icon = "bi-receipt", Url = "/Dashboard/Orders", Badge = "12", BadgeColor = "danger" },
-                    new MenuItem { Id = "customers", Title = "Customers", Icon = "bi-people", Url = "/Dashboard/Customers" },
-                    new MenuItem { Id = "inventory", Title = "Inventory", Icon = "bi-boxes", Url = "/Dashboard/Inventory" }
+                    new MenuItem { Id = "products", Title = "Products", Icon = "bi-box", Url = "/Commerce/Products" },
+                    new MenuItem { Id = "orders", Title = "Orders", Icon = "bi-receipt", Url = "/Commerce/Orders", Badge = "12", BadgeColor = "danger" },
+                    new MenuItem { Id = "customers", Title = "Customers", Icon = "bi-people", Url = "/Commerce/Customers" },
+                    new MenuItem { Id = "inventory", Title = "Inventory", Icon = "bi-boxes", Url = "/Commerce/Inventory" }
                 }
             },
             new MenuItem
